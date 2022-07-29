@@ -49,15 +49,16 @@ namespace DeveloperRoadmapApi.Controllers
          [HttpGet("getTopicById")]
         public IActionResult GetById([FromQuery]int Id)
         {
-            UpdateTopicDto? updateTopicDto = _context.Topics.Where(topic => topic.Id == Id).Select(n => new UpdateTopicDto()
+            UpdateTopicDto? topic = _context.Topics.Where(topic => topic.Id == Id).Select(n => new UpdateTopicDto()
             {
                 TopicId = n.Id,
-                Name = n.Name
+                Name = n.Name,
+                LanguageId = n.Language.Id
             }).FirstOrDefault();
 
-            if (updateTopicDto == null) return BadRequest($"Topic with id: {Id} does not exist in the database");
+            if (topic == null) return BadRequest($"Topic with id: {Id} does not exist in the database");
 
-            return Ok(updateTopicDto);
+            return Ok(topic);
         }
 
 
