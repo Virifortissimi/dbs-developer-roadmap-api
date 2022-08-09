@@ -46,6 +46,22 @@ namespace DeveloperRoadmapApi.Controllers
             return Ok(allTopics);
         }
 
+         [HttpGet("getTopicById")]
+        public IActionResult GetById([FromQuery]int Id)
+        {
+            UpdateTopicDto? topic = _context.Topics.Where(topic => topic.Id == Id).Select(n => new UpdateTopicDto()
+            {
+                TopicId = n.Id,
+                Name = n.Name,
+                LanguageId = n.Language.Id
+            }).FirstOrDefault();
+
+            if (topic == null) return BadRequest($"Topic with id: {Id} does not exist in the database");
+
+            return Ok(topic);
+        }
+
+
         //CRUD - UPDATE A TOPIC
         // localhost:port/api/topic/updateTopic/1
         [HttpPut("updateTopic")]
